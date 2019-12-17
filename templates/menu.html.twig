@@ -1,0 +1,44 @@
+<div class="ui large top fixed hidden menu inverted blue">
+<div class="ui container">
+
+<div class="main-logo"><a href="index.php"><img src="images/logo.png" alt="Logo" srcset="images/logo@2x.png 2x"></a></div>
+
+{% for k,v in menu %}
+    {% if v is iterable %}
+        {% for key, value in v %}
+          {% if key == "position" %}
+              {% if value == "left" %}
+                <a class="item
+                {% if v.chosen is not empty %}
+                   active
+                {% endif %}
+                "
+                {% if v.link is defined %}
+                    {% if v.link is not empty  %}
+                      href="?page={{ v.link }}"
+                    {% endif %}
+                {% endif %}
+                >{{ k }}</a>
+              {% else %}
+                <div class="right menu">
+                  <div class="item {% if v.chosen is defined %}
+                      {% if v.chosen == "True"  %}
+                      active
+                      {% endif %}
+                  {% endif %}">
+                      <a class="ui white button"
+                      {% if v.link is defined %}
+                          {% if v.link is not empty  %}
+                            href="?page={{ v.link }}"
+                          {% endif %}
+                      {% endif %}
+                      >{{ k }} <i class="cog icon setting"></i></a>
+                   </div>
+                </div>
+              {% endif %}
+          {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+</div>
+</div>

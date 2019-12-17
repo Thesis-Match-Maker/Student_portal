@@ -1,0 +1,127 @@
+.ui.large.menu {
+  height: 51.4062px;
+}
+
+.masthead h1.ui.header {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  font-size: 4em;
+  font-weight: normal;
+}
+
+.masthead .ui.container {
+  margin-bottom: 1.5em;
+}
+
+.ui.segment.content {
+  margin-top: 4em;
+}
+
+.ui.segment.content p {
+  font-size: 14px;
+  margin: 0px;
+  line-height: 28px;
+}
+
+.ui.segment.content p.main {
+  margin: 0px 0px 20px;
+}
+
+.main-logo {
+  padding-top: 0;
+  padding-bottom: 0;
+  background-color: #40a7db;
+  float: left;
+  height: 51.4062px;
+  padding: 7px 15px;
+}
+
+.cog.icon.setting {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+  top: 0px;
+  position: relative;
+}
+
+.ui.image.label {
+  margin-bottom: 4px;
+}
+
+.ui.accordion.attached {
+  border-radius: 0px 0px .28571429rem .28571429rem;
+}
+
+.ui.accordion .ui.red.label,
+.ui.accordion .ui.green.label {
+  bottom: 0px;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50rem;
+    border-color: rgba(0, 0, 0, 0.1);
+    padding: 3px 5px;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #89B84C;
+    border-radius: 50rem;
+    height: 0.7em;
+    width: 0.7em;
+}
+
+.menu-button {
+  cursor: pointer;
+}
+.menu-button i {
+  display: none;
+}
+.menu-button.active {
+  background-color: #e5f3ff;
+  padding-left: 20px;
+}
+.menu-button.active i {
+  display: initial;
+  color: green;
+}
+.ui.clearing.title:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.modal {
+  margin-top: 0!important;
+}
+
+.ui[class*="top"].segment-fix {
+    bottom: 0;
+    margin-bottom: 0;
+    top: 0;
+    margin-top: 1rem;
+    border-radius: .28571429rem .28571429rem 0 0;
+}
+
+.clear_warning {
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 10px 0px 10px 20px !important
+  border-bottom: 1px solid #dededf !important;
+}
+.clear_warning .content {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.ui.horizontal.divider.header {
+    margin-top: 70px !important;
+}
+
+.ui.orange.label {
+    margin: 1px;
+}

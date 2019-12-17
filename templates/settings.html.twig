@@ -1,0 +1,69 @@
+{% extends "main.html.twig" %}
+{% block content %}
+<div class="three wide column"></div>
+<div class="ten wide column">
+  <form class="ui form" action="?page=settings" method="post">
+    <h4 class="ui dividing header">Settings</h4>
+    <div class="field">
+      <label>Student ID</label>
+      <div class="fields">
+        <div class="sixteen wide field">
+          <input type="text" name="student[studentid]" value="{{ student_id }}" disabled>
+        </div>
+      </div>
+      <label>Name</label>
+      <div class="two fields">
+        <div class="field">
+          <input type="text" name="student[first-name]" placeholder="First Name" value="{{ name }}" disabled>
+        </div>
+        <div class="field">
+          <input type="text" name="student[last-name]" placeholder="Last Name" value="{{ surname }}" disabled>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Email address</label>
+      <div class="fields">
+        <div class="sixteen wide field">
+          <input type="text" name="student[emailaddress]" placeholder="Email address" value="{{ email }}" disabled>
+        </div>
+      </div>
+    </div>
+    <h4 class="ui dividing header">Experiences</h4>
+    <div class="field">
+      <label>Interests</label>
+      <select name="interests[]" multiple="" class="ui search fluid dropdown interests">
+        <option value="">Select interests</option>
+        {% for item in skills['data'] %}
+           <option value="{{ item['interest_text'] }}">{{ item['interest_text'] }}</option>
+         {% endfor %}
+      </select>
+    </div>
+    <div class="sixteen wide field">
+      <label>Project Duration</label>
+      <div class="two fields">
+        <div class="field">
+          <div class="ui calendar" id="start_calendar">
+            <div class="ui input left icon">
+              <i class="calendar icon"></i>
+              <input type="text" placeholder="Date" {{ start_month_var }} name="month[start]">
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui calendar" id="stop_calendar">
+            <div class="ui input left icon">
+              <i class="calendar icon"></i>
+              <input type="text" placeholder="Date" {{ end_month_var }} name="month[end]">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui warning message" style="display: block">
+        <i class="attention sign icon"></i> Your minimum time expectation is 6 months
+      </div>
+    </div>
+    <button class="ui submit fluid primary button" type="submit">Save</button>
+  </form>
+</div>
+{% endblock %}

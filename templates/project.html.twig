@@ -1,0 +1,43 @@
+{% extends "main.html.twig" %}
+{% block content %}
+
+<div class="info" start-month="{{ start_month }}" end-month="{{ end_month}}" interests="{{ interests }}"></div>
+
+<div class="sixteen wide column project">
+
+  <div class="ui sixteen wide column grid stackable">
+    <div class="five wide column">
+      <div class="ui segment-fix choose-message">
+        <div class="ui warning message"><i class="attention sign icon"></i> You need to choose skills or courses</div>
+      </div>
+      <div class="ui top segment-fix select-skills">
+        <div class="ui top attached segment student_skills"><b>Student Skills</b></div>
+      </div>
+      <div class="ui top segment-fix select-course">
+        <div class="ui top attached segment courses_taken"><b>Courses Taken</b></div>
+      </div>
+    </div>
+    <div class="eleven wide column project_list">
+   </div>
+</div>
+
+<div class="ui fullscreen modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Apply for a thesis subject
+  </div>
+  <div class="content">
+    <div class="ui form">
+      <div class="field">
+        <label>Message</label>
+        <textarea></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui button">Cancel</div>
+    <div class="ui green button">Send</div>
+  </div>
+</div>
+
+{% endblock %}
