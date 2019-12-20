@@ -1,3 +1,5 @@
+// Templates
+
 const template_top = ({
   teacher_name,
   teacher_id,
@@ -60,10 +62,12 @@ const template_content = ({
   </div>
 </div>`;
 
-
 const courses_taken = ({
   course_name
 }) => `<div class="ui attached segment menu-button" data-name="${course_name}"><i class="check icon"></i> ${course_name}</div>`;
+
+
+// General functions
 
 function getMonths(date) {
   if (date !== null) {
@@ -85,6 +89,17 @@ function getMonths(date) {
   };
 }
 
+function getYears(date) {
+  if (date !== null) {
+    var date = new Date(date);
+    var year = date.toLocaleString('default', {
+      year: 'numeric'
+    });
+    return year;
+  }
+  return;
+}
+
 function getInfoDate(date) {
   var month = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
@@ -96,8 +111,12 @@ function getInfoDate(date) {
 }
 
 
+
+
 $(document).ready(function() {
 
+  //  Calendar for hard requirements
+  
   var stop_date = new Date();
   $('#start_calendar').calendar({
     type: 'date',
@@ -155,14 +174,19 @@ $(document).ready(function() {
   $('.ui.dropdown').dropdown({
     allowAdditions: true,
   });
+
+  // Fetch queries and inject in page
+  
   $.get("fetch_values.php?page=experiences", function(data) {
     if (data.length != 0)
       $('.ui.dropdown.previous_experiences').dropdown('set selected', JSON.parse(data));
   });
+  
   $.get("fetch_values.php?page=interests", function(data) {
     if (data.length != 0)
       $('.ui.dropdown.interests').dropdown('set selected', JSON.parse(data));
   });
+  
   $.get("fetch_values.php?page=project_duration", function(data) {
     if (data.length != 0) {
       var parse = JSON.parse(data);
@@ -179,6 +203,7 @@ $(document).ready(function() {
     "exclusive": false
   });
 
+  // Load all projects
   if ($(".project")[0]) {
     $.get("directus_load.php?page=projects", function(data) {
 
@@ -196,6 +221,7 @@ $(document).ready(function() {
           }
         });
 
+        // Inject projects in page
         if (!teacher_exists) {
           $(".project_list").prepend([{
             teacher_name: teacher_name,
@@ -220,10 +246,19 @@ $(document).ready(function() {
         var startM = getMonths(y.availability_start)
         var stopM = getMonths(y.availability_stop)
 
+        var stopY = getYears(y.availability_stop)
+        var startY = getYears(y.availability_start)
+
+        var calculate_months = "";
+        
+        // Calculate the months
         if (stopM["numeric"] - startM["numeric"] > 0) {
-          var calculate_months = (stopM["numeric"] - startM["numeric"]);
+          if(startY !== stopY)
+            calculate_months += Math.abs(parseInt(stopY)-parseInt(startY))+" year and ";
+          calculate_months += (parseInt(stopM["numeric"]) - parseInt(startM["numeric"]));
         } else {
-          var calculate_months = (12 - stopM["numeric"]) + startM["numeric"];
+
+          calculate_months += 12-Math.abs(parseInt(stopM["numeric"]) - parseInt(startM["numeric"]));
         }
 
         display_months = startM["month"] + ' - ' + stopM["month"] + ' (' + calculate_months + ' months)';
@@ -244,15 +279,7 @@ $(document).ready(function() {
         });
       });
 
-      $.get("directus_load.php?page=requirements", function(data) {
-        $.each(data["data"], function(a, b) {
-          $(".student_skills").after([{
-            course_name: b.skills_text
-          }].map(courses_taken).join(''));
-        });
-        $('.ui.menu-button').state();
-      });
-
+      // fetch skills
       $.get("directus_load.php?page=requirements_list", function(data) {
         $.each(data["data"], function(e, y) {
           $(".project_list [data-teacher]").each(function(a, b) {
@@ -261,7 +288,26 @@ $(document).ready(function() {
           })
         });
       });
+      
+      $.get("directus_load.php?page=requirements", function(data) {
+        var concat_skills = [];
+        $(".project_list [data-teacher]").each(function(t, u) {
+          if($(u).attr("skills") !== "") {
+            new_arr = $(u).attr("skills").split(",");
+            new_arr.pop()
+            concat_skills = concat_skills.concat(new_arr);
+          }
+        })
+        $.each(data["data"], function(a, b) {
+          if($.inArray(b.skills_text, concat_skills) !== -1)
+            $(".student_skills").after([{
+              course_name: b.skills_text
+            }].map(courses_taken).join(''));
+        });
+        $('.ui.menu-button').state();
+      });
 
+      // fetch courses
       $.get("directus_load.php?page=interests_list", function(data3) {
         $.each(data3["data"], function(e, y) {
           $(".project_list [data-teacher]").each(function(a, b) {
@@ -269,15 +315,6 @@ $(document).ready(function() {
               $(b).attr("interests", y.interest_text + "," + $(b).attr("interests"));
           })
         });
-      });
-
-      $.get("directus_load.php?page=all_courses", function(data) {
-        $.each(data["data"], function(a, b) {
-          $(".courses_taken").after([{
-            course_name: b.course_name
-          }].map(courses_taken).join(''));
-        });
-        $('.ui.menu-button').state();
       });
 
       $.get("directus_load.php?page=course_list", function(data3) {
@@ -288,9 +325,26 @@ $(document).ready(function() {
           })
         });
       });
+      
+      $.get("directus_load.php?page=all_courses", function(data) {
+        var concat_course_taken = [];
+        $(".project_list [data-teacher]").each(function(t, u) {
+          if($(u).attr("data-courses") !== "") {
+            new_arr = $(u).attr("data-courses").split(",");
+            new_arr.pop()
+            concat_course_taken = concat_course_taken.concat(new_arr);
+          }
+        })
+        $.each(data["data"], function(a, b) {
+          if($.inArray(b.course_name, concat_course_taken) !== -1)
+            $(".courses_taken").after([{
+              course_name: b.course_name
+            }].map(courses_taken).join(''));
+        });
+        $('.ui.menu-button').state();
+      });
 
       $.get("directus_load.php?page=courses_taught", function(data) {
-
         $(".select-course > div, .select-skills > div").on("click", function() {
           var courses_filtered = [];
           var skills_filtered = [];
@@ -321,12 +375,12 @@ $(document).ready(function() {
                 if (c.length > 0) {
                   var index = $.inArray(c, student_total);
 
-                  // exists
+                  // skills students exists in teacher skills list
                   if (index != -1) {
                     course_exists += 1;
 
                   } else {
-                    // not exists
+                    // kills students not exists in teacher skills list
                     course_not_exists += 1;
                     if ($.inArray(c.replace(/ /g, "_").toLowerCase(), clean_teacher_total) >= 0)
                       not_match_suggest.push(c);
@@ -334,11 +388,14 @@ $(document).ready(function() {
                 }
               });
 
+              // calculate all courses
               var total_courses = [];
               $(".select-course > div").each(function(x, d) {
                 if (typeof $(d).data("name") !== "undefined")
                   total_courses.push($(d).data("name"));
               });
+
+              // calculate all skills
               var total_skills = [];
               $(".select-skills > div").each(function(x, d) {
                 if (typeof $(d).data("name") !== "undefined")
@@ -361,6 +418,7 @@ $(document).ready(function() {
                   missing_clean_skills.push(d);
               });
 
+              // suggestion text
               var suggested_text = "You are at least suggested to have ";
               if (missing_clean_course.length > 0)
                 suggested_text += 'the following courses: <b class="ui label orange">' + [missing_clean_course.slice(0, -1).join('</b>, <b class="ui label orange">'), missing_clean_course.slice(-1)[0]].join(missing_clean_course.length < 2 ? '' : '</b> and <b class="ui label orange">') + '</b>';
@@ -370,6 +428,7 @@ $(document).ready(function() {
                 suggested_text += ' the following <b>skills</b>: <b class="ui label orange">' + [missing_clean_skills.slice(0, -1).join('</b>, <b class="ui label orange">'), missing_clean_skills.slice(-1)[0]].join(missing_clean_skills.length < 2 ? '' : '</b> or <b class="ui label orange">') + '</b>';
               }
 
+              // Calculate penalties
               var penalty = $(b).attr("penalty").split(",").filter(Boolean);
 
               if (penalty.length === 0)
@@ -435,6 +494,7 @@ $(document).ready(function() {
           }
         });
 
+        // Calculate overlap days
         function dateRangeOverlaps(t_start, t_end, s_start, s_end) {
           var min_end = Math.min(t_end, s_end);
           var max_start = Math.max(t_start, s_start);
@@ -463,6 +523,7 @@ $(document).ready(function() {
 
             $(b).attr("overlap_days", overlap_days);
 
+            // Overlap days less than 150?
             if (overlap_days < 150) {
               $(b).css("background-color", "#fff6f6");
               $(b).attr("penalty", "short_overlap_days," + $(b).attr("penalty"))
