@@ -429,8 +429,10 @@ $(document).ready(function() {
               }
 
               // Calculate penalties
+              // Fetch all penalties which are defined before in the code and calculate percentage.
               var penalty = $(b).attr("penalty").split(",").filter(Boolean);
 
+              // when penalty is found, display error and provide ways how to improve
               if (penalty.length === 0)
                 $("div[data-teacher=" + $(b).attr("data-teacher") + "]").each(function(o, p) {
                   var calc = course_exists / (course_exists + course_not_exists) * 100;
